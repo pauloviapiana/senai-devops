@@ -7,7 +7,8 @@ console.log(numeroSecreto);
 let chute;
 let tentativas = 1;
 let maxTentativas = 10;
-const pontuacao = 1000;
+//Muda de const para let(bug fix)
+let pontuacao = 1000;
 
 while (chute != numeroSecreto && tentativas <= maxTentativas) {
     chute = prompt(`Escolha um número entre 1 e ${numeroMaximo}`);
