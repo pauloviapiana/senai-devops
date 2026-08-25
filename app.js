@@ -33,7 +33,7 @@ while (chute != numeroSecreto && tentativas <= maxTentativas) {
         } else {
             alert(`O número secreto é maior que ${chute}`);
         }
-        let pontosPerdidos = (chute - numeroSecreto) / 2;
+        let pontosPerdidos = Math.abs(chute - numeroSecreto) / 2;
         pontuacao = pontuacao - pontosPerdidos;
         tentativas++;
     }
