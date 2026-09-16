@@ -1,4 +1,3 @@
-// Alteração Teste
 class JogoNumeroSecreto {
   constructor(deps = {}) {
     // Agora as dependências esperam funções de terminal (I/O assíncrono)
