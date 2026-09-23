@@ -1,4 +1,4 @@
-const JogoNumeroSecreto = require("./JogoNumeroSecreto");
+const JogoNumeroSecreto = require("../JogoNumeroSecreto");
 
 // Utilitário para padronizar a criação do jogo mockado
 const setupGame = (askMock) => {
