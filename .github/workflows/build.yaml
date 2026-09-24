@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - "feat/**"
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t senai-devops .
+
+      - name: Run tests
+        run: docker run --rm senai-devops
