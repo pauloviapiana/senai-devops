@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "cli": "node cli.js",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
@@ -11,6 +13,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "supertest": "^7.3.1"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
   }
 }

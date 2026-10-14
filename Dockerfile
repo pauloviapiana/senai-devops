@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-COPY index.js JogoNumeroSecreto.js ./
+COPY index.js app.js cli.js JogoNumeroSecreto.js ./
 COPY test ./test
 
 ENV NODE_ENV=test
