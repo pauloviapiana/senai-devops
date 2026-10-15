@@ -1,13 +1,33 @@
 {
   "name": "senai-devops",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "API e CLI do Jogo do Número Secreto",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node index.js",
-    "cli": "node cli.js",
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "cli": "node src/cli/index.js",
     "test": "jest",
     "test:coverage": "jest --coverage"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/server.js",
+      "!src/cli/index.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 90,
+        "branches": 80,
+        "functions": 90,
+        "lines": 90
+      }
+    }
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const criarApp = require('../app');
+const criarApp = require('../../src/app');
 
 // 0.1 * 5000 + 1 = 501
 const setupApp = () => criarApp({ random: () => 0.1 });
@@ -117,4 +117,22 @@ test('JSON inválido retorna 400', async () => {
 
   expect(res.status).toBe(400);
   expect(res.body.erro).toBe('JSON inválido.');
+});
+
+test('rota inexistente retorna 404', async () => {
+  const res = await request(setupApp()).get('/nao-existe');
+
+  expect(res.status).toBe(404);
+  expect(res.body).toEqual({ erro: 'Rota não encontrada.' });
+});
+
+test('erro inesperado retorna 500 sem vazar detalhes', async () => {
+  const jogoService = { criar: () => { throw new Error('falha interna'); } };
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+
+  const res = await request(criarApp({ jogoService })).post('/jogos');
+
+  expect(res.status).toBe(500);
+  expect(res.body).toEqual({ erro: 'Erro interno do servidor.' });
+  console.error.mockRestore();
 });

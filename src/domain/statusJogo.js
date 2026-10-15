@@ -1,0 +1,8 @@
+const STATUS_JOGO = Object.freeze({
+  EM_ANDAMENTO: 'EM_ANDAMENTO',
+  VITORIA: 'VITORIA',
+  DERROTA: 'DERROTA',
+  CANCELADO: 'CANCELADO'
+});
+
+module.exports = STATUS_JOGO;
