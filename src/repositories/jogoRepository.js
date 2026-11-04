@@ -2,12 +2,12 @@ function criarJogoRepository() {
   const jogos = new Map();
 
   return {
-    salvar(id, jogo) {
+    async salvar(id, jogo) {
       jogos.set(id, jogo);
       return jogo;
     },
 
-    buscarPorId(id) {
+    async buscarPorId(id) {
       return jogos.get(id) ?? null;
     }
   };

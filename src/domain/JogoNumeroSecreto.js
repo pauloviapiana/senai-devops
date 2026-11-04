@@ -79,6 +79,24 @@ class JogoNumeroSecreto {
       ...(!this.emAndamento && { numeroSecreto: this.numeroSecreto })
     };
   }
+
+  static restaurar({
+    numeroSecreto,
+    numeroMaximo,
+    maxTentativas,
+    tentativas,
+    pontuacao,
+    status
+  }) {
+    const jogo = Object.create(JogoNumeroSecreto.prototype);
+    jogo.numeroMaximo = numeroMaximo;
+    jogo.maxTentativas = maxTentativas;
+    jogo.tentativas = tentativas;
+    jogo.pontuacao = pontuacao;
+    jogo.status = status;
+    jogo.numeroSecreto = numeroSecreto;
+    return jogo;
+  }
 }
 
 module.exports = JogoNumeroSecreto;

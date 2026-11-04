@@ -6,8 +6,8 @@ const { NotFoundError, ConflictError, ValidationError } = require('../errors/App
 function criarJogoService({ repository = criarJogoRepository(), random, gerarId = randomUUID } = {}) {
   const visao = (id, jogo, extras = {}) => ({ id, ...extras, ...jogo.estado() });
 
-  const obterJogo = (id) => {
-    const jogo = repository.buscarPorId(id);
+  const obterJogo = async (id) => {
+    const jogo = await repository.buscarPorId(id);
     if (!jogo) {
       throw new NotFoundError('Jogo não encontrado.');
     }
@@ -15,20 +15,20 @@ function criarJogoService({ repository = criarJogoRepository(), random, gerarId 
   };
 
   return {
-    criar() {
+    async criar() {
       const id = gerarId();
-      const jogo = repository.salvar(id, new JogoNumeroSecreto({ random }));
+      const jogo = await repository.salvar(id, new JogoNumeroSecreto({ random }));
       return visao(id, jogo, {
         mensagem: `Boas vindas ao jogo do número secreto! Escolha um número entre 1 e ${jogo.numeroMaximo}.`
       });
     },
 
-    buscar(id) {
-      return visao(id, obterJogo(id));
+    async buscar(id) {
+      return visao(id, await obterJogo(id));
     },
 
-    chutar(id, numero) {
-      const jogo = obterJogo(id);
+    async chutar(id, numero) {
+      const jogo = await obterJogo(id);
 
       if (!jogo.emAndamento) {
         throw new ConflictError('O jogo já foi encerrado.', visao(id, jogo));
@@ -40,12 +40,14 @@ function criarJogoService({ repository = criarJogoRepository(), random, gerarId 
         throw new ValidationError(resultado.mensagem, visao(id, jogo));
       }
 
+      await repository.salvar(id, jogo);
       return visao(id, jogo, { mensagem: resultado.mensagem });
     },
 
-    cancelar(id) {
-      const jogo = obterJogo(id);
+    async cancelar(id) {
+      const jogo = await obterJogo(id);
       jogo.cancelar();
+      await repository.salvar(id, jogo);
       return visao(id, jogo, { mensagem: 'Jogo encerrado!' });
     }
   };

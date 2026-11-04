@@ -87,3 +87,20 @@ test('aceita configuração customizada', () => {
   expect(jogo.status).toBe(STATUS_JOGO.DERROTA);
   expect(jogo.pontuacao).toBe(46);
 });
+
+test('restaurar reconstitui o jogo a partir dos dados persistidos', () => {
+  const jogo = JogoNumeroSecreto.restaurar({
+    numeroSecreto: 501,
+    numeroMaximo: 5000,
+    maxTentativas: 10,
+    tentativas: 3,
+    pontuacao: 900,
+    status: STATUS_JOGO.EM_ANDAMENTO
+  });
+
+  expect(jogo.numeroSecreto).toBe(501);
+  expect(jogo.tentativas).toBe(3);
+  expect(jogo.pontuacao).toBe(900);
+  expect(jogo.emAndamento).toBe(true);
+  expect(jogo.chutar(501).mensagem).toBe('Você descobriu o número secreto 501 com 3 tentativas');
+});

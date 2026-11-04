@@ -1,19 +1,19 @@
 function criarJogoController(jogoService) {
   return {
-    criar(req, res) {
-      res.status(201).json(jogoService.criar());
+    async criar(req, res) {
+      res.status(201).json(await jogoService.criar());
     },
 
-    buscar(req, res) {
-      res.json(jogoService.buscar(req.params.id));
+    async buscar(req, res) {
+      res.json(await jogoService.buscar(req.params.id));
     },
 
-    chutar(req, res) {
-      res.json(jogoService.chutar(req.params.id, req.body?.numero));
+    async chutar(req, res) {
+      res.json(await jogoService.chutar(req.params.id, req.body?.numero));
     },
 
-    cancelar(req, res) {
-      res.json(jogoService.cancelar(req.params.id));
+    async cancelar(req, res) {
+      res.json(await jogoService.cancelar(req.params.id));
     }
   };
 }

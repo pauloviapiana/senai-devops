@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: senai-devops-db
+    environment:
+      POSTGRES_USER: senai
+      POSTGRES_PASSWORD: senai
+      POSTGRES_DB: jogos
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U senai -d jogos"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - senai-net
+
+  api:
+    build:
+      context: .
+      target: production
+    container_name: senai-devops-api
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgres://senai:senai@db:5432/jogos
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - senai-net
+
+volumes:
+  postgres_data:
+
+networks:
+  senai-net:
+    driver: bridge
