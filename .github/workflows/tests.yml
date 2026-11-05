@@ -1,5 +1,7 @@
 name: Tests
 
+# Workflow de testes: roda em Pull Requests para development, em pushes para main
+# e pode ser chamado por outros workflows (workflow_call).
 on:
   pull_request:
     branches:
@@ -7,6 +9,7 @@ on:
   push:
     branches:
       - main
+  workflow_call:
 
 jobs:
   test:
