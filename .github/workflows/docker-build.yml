@@ -1,0 +1,17 @@
+name: Docker Build
+
+# Workflow de validação: em Pull Requests, apenas constrói a imagem
+# para garantir que o Dockerfile continua funcionando. Não publica nada.
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build --tag senai-devops:${{ github.sha }} .
