@@ -16,6 +16,18 @@ test('GET /health responde ok', async () => {
   expect(res.body).toEqual({ status: 'ok' });
 });
 
+test('GET /metrics expõe métricas Prometheus', async () => {
+  const app = setupApp();
+  await request(app).get('/health');
+
+  const res = await request(app).get('/metrics');
+
+  expect(res.status).toBe(200);
+  expect(res.headers['content-type']).toMatch(/text\/plain/);
+  expect(res.text).toContain('http_requests_total');
+  expect(res.text).toContain('http_request_duration_seconds');
+});
+
 test('POST /jogos cria um jogo em andamento sem revelar o número secreto', async () => {
   const res = await request(setupApp()).post('/jogos');
 

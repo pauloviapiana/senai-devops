@@ -28,11 +28,26 @@ docker run -p 3000:3000 senai-devops
 docker build --target test -t senai-devops:test .   # apenas o estágio de testes
 ```
 
+### Docker Compose (API + Postgres + Observabilidade)
+
+```bash
+docker compose up --build -d
+```
+
+| Serviço | URL |
+| ------- | --- |
+| API | http://localhost:3000 |
+| Prometheus | http://localhost:9090 |
+| Grafana | http://localhost:3001 (`admin` / `admin`) |
+
+Detalhes da stack, dashboards e roteiro de apresentação: [docs/observabilidade/README.md](docs/observabilidade/README.md).
+
 ## Endpoints
 
 | Método | Rota                 | Descrição                          |
 | ------ | -------------------- | ---------------------------------- |
 | GET    | `/health`            | Health check                       |
+| GET    | `/metrics`           | Métricas Prometheus                |
 | POST   | `/jogos`             | Cria um novo jogo                  |
 | GET    | `/jogos/:id`         | Consulta o estado do jogo          |
 | POST   | `/jogos/:id/chutes`  | Envia um palpite: `{ "numero": 42 }` |
@@ -54,7 +69,10 @@ src/
   domain/            # regras do jogo, sem dependência de HTTP ou terminal
   errors/            # erros da aplicação com status HTTP
   middlewares/       # 404 e tratamento de erros
+  metrics/           # Prometheus (prom-client) e /metrics
   cli/               # interface de terminal
+observabilidade/     # Prometheus + Grafana (provisionamento)
+docs/observabilidade/
 test/
   unit/
   integration/

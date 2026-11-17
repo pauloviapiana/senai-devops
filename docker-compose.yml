@@ -33,8 +33,72 @@ services:
     networks:
       - senai-net
 
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: senai-devops-prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observabilidade/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    depends_on:
+      - api
+    networks:
+      - senai-net
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: senai-devops-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/visao-geral.json
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./observabilidade/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observabilidade/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    networks:
+      - senai-net
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: senai-devops-cadvisor
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - senai-net
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    container_name: senai-devops-postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: postgresql://senai:senai@db:5432/jogos?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - senai-net
+
 volumes:
   postgres_data:
+  prometheus_data:
+  grafana_data:
 
 networks:
   senai-net:

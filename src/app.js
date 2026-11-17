@@ -3,6 +3,7 @@ const criarJogoService = require('./services/jogoService');
 const criarRoutes = require('./routes');
 const notFound = require('./middlewares/notFound');
 const errorHandler = require('./middlewares/errorHandler');
+const { metricsMiddleware, metricsHandler } = require('./metrics');
 
 function criarApp({ jogoService, random } = {}) {
   const app = express();
@@ -10,7 +11,9 @@ function criarApp({ jogoService, random } = {}) {
 
   app.disable('x-powered-by');
   app.use(express.json());
+  app.use(metricsMiddleware);
 
+  app.get('/metrics', metricsHandler);
   app.use(criarRoutes({ jogoService: service }));
 
   app.use(notFound);
